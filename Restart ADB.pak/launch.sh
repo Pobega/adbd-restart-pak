@@ -78,12 +78,24 @@ restart_adbd() {
 		return 1
 	fi
 	# Rebinding can't help once the port has picked another role, and forcing
-	# it back hangs the writer. Only a replug or a reboot fixes that.
+	# it back hangs the writer. Only a replug or a reboot fixes that. With no
+	# cable plugged in, the role reads "none".
 	role="$(cat "$OTG_ROLE" 2>/dev/null)"
-	if [ -n "$role" ] && [ "$role" != usb_device ]; then
+	case "$role" in
+	"" | usb_device) ;;
+	none)
+		FAILURE="No USB cable detected"
+		return 1
+		;;
+	usb_host)
+		FAILURE="USB is in host mode, replug"
+		return 1
+		;;
+	*)
 		FAILURE="USB role is $role, replug"
 		return 1
-	fi
+		;;
+	esac
 
 	# The usual failure: the OTG manager clears the UDC binding on disconnect
 	# while adbd keeps running. The kernel also clears it if adbd dies. Re-running

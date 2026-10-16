@@ -31,7 +31,7 @@ doesn't break adb.
 
 The result shows on screen for 3 seconds (B dismisses it): `ADB restarted`,
 `ADB restarted (adbd had stopped)` when adbd had died, or a short reason such as
-`No USB host seen, check cable`. Messages use a bundled
+`No USB cable detected` or `No USB host seen, check cable`. Messages use a bundled
 [minui-presenter](https://github.com/josegonzalez/minui-presenter) (`h700-nextui`
 build, MIT), so they follow the NextUI theme.
 
@@ -58,6 +58,7 @@ took and the result.
 
 ```sh
 make lint   # shellcheck (sh mode) via podman; SHELLCHECK=shellcheck for a local one
+make test   # dry-run launch.sh under dash and BusyBox ash (podman)
 make bin    # download the pinned minui-presenter into Restart ADB.pak/bin/
 make zip    # dist/Restart ADB.pak.zip (runs `make bin`)
 make push   # adb push into /mnt/SDCARD/Tools/h700 (runs `make bin`; needs adbd alive)

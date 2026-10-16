@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v7
       - name: Lint
         run: make lint SHELLCHECK=shellcheck
+      - name: Test
+        run: make test
       - name: Build
         run: make zip
 

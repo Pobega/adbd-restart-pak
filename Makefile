@@ -6,10 +6,15 @@ SHELLCHECK ?= podman run --rm -v "$(CURDIR):/mnt:Z" docker.io/koalaman/shellchec
 MINUI_PRESENTER_VERSION := 0.13.4
 MINUI_PRESENTER_URL := https://github.com/josegonzalez/minui-presenter
 
-.PHONY: lint bin zip push clean
+.PHONY: lint test bin zip push clean
 
 lint:
 	$(SHELLCHECK) -s sh "$(PAK_DIR)/launch.sh"
+
+# Run launch.sh under the shells H700 base OSes use: dash and BusyBox ash.
+test:
+	podman run --rm -v "$(CURDIR):/repo:ro,Z" docker.io/library/debian:stable-slim sh /repo/tests/harness.sh dash
+	podman run --rm -v "$(CURDIR):/repo:ro,Z" docker.io/library/busybox:stable sh /repo/tests/harness.sh ash
 
 # PAK_DIR has a space in it, so this checks for the file itself rather than
 # using it as a make target. `make clean bin` re-fetches.
