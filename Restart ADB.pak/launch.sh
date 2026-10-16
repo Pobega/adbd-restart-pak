@@ -79,11 +79,11 @@ restart_adbd() {
 	fi
 	# Rebinding can't help once the port has picked another role, and forcing
 	# it back hangs the writer. Only a replug or a reboot fixes that. With no
-	# cable plugged in, the role reads "none".
+	# cable plugged in, the role reads "null".
 	role="$(cat "$OTG_ROLE" 2>/dev/null)"
 	case "$role" in
 	"" | usb_device) ;;
-	none)
+	null)
 		FAILURE="No USB cable detected"
 		return 1
 		;;
